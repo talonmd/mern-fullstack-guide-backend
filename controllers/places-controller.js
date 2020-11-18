@@ -1,3 +1,5 @@
+const fs = require("fs")
+
 const HttpError = require("../models/http-error")
 
 //const { v4: uuidv4 } = require("uuid")
@@ -95,7 +97,7 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location: coordinates,
-    image: "https://images.pexels.com/photos/63553/pexels-photo-63553.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    image: req.file.path,
     creator,
   })
 
@@ -181,6 +183,8 @@ const deletePlace = async (req, res, next) => {
     return next(error)
   }
 
+  const imagePath = place.image
+
   try {
     const sess = await mongoose.startSession()
     sess.startTransaction()
@@ -192,6 +196,10 @@ const deletePlace = async (req, res, next) => {
     const error = new HttpError("Something went wrong, could not delete place.", 500)
     return next(error)
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log(err)
+  })
 
   // if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
   //   throw new HttpError("Could not find a place to delete from that place ID.", 404)
