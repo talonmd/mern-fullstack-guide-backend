@@ -7,7 +7,6 @@ const getCoordsForAddress = require("../util/location")
 const User = require("../models/user")
 const Place = require("../models/place")
 const mongoose = require("mongoose")
-const user = require("../models/user")
 
 // let DUMMY_PLACES = [
 //   {
